@@ -35,11 +35,13 @@ namespace TP.ConcurrentProgramming.Data
       Random random = new Random();
       for (int i = 0; i < numberOfBalls; i++)
       {
-        Vector startingPosition = new(random.Next(100, 400 - 100), random.Next(100, 400 - 100));
-        Ball newBall = new(startingPosition, startingPosition);
-        upperLayerHandler(startingPosition, newBall);
-        BallsList.Add(newBall);
-      }
+          Vector startingPosition = new(random.Next(20, 380), random.Next(20, 380));
+          Vector initialVelocity = new(random.NextDouble() * 10 - 5, random.NextDouble() * 10 - 5);
+          Ball newBall = new(startingPosition, initialVelocity);
+          upperLayerHandler(startingPosition, newBall);
+          BallsList.Add(newBall);
+       }
+
     }
 
     #endregion DataAbstractAPI
@@ -81,9 +83,27 @@ namespace TP.ConcurrentProgramming.Data
 
     private void Move(object? x)
     {
-      foreach (Ball item in BallsList)
-        item.Move(new Vector((RandomGenerator.NextDouble() - 0.5) * 10, (RandomGenerator.NextDouble() - 0.5) * 10));
-    }
+            double boardSize = 400; 
+            double ballDiameter = 20;
+
+            foreach (Ball item in BallsList)
+            {
+                double nextX = item.Position.x + item.Velocity.x;
+                double nextY = item.Position.y + item.Velocity.y;
+
+                double newVx = item.Velocity.x;
+                double newVy = item.Velocity.y;
+
+                if (nextX <= 0 || nextX >= boardSize - ballDiameter)
+                    newVx = -item.Velocity.x;
+
+                if (nextY <= 0 || nextY >= boardSize - ballDiameter)
+                    newVy = -item.Velocity.y;
+
+                item.Velocity = new Vector(newVx, newVy);
+                item.Move();
+            }
+        }
 
     #endregion private
 
