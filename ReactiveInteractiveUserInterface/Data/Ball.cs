@@ -28,13 +28,13 @@ namespace TP.ConcurrentProgramming.Data
 
     public IVector Velocity { get; set; }
 
-    #endregion IBall
+        #endregion IBall
 
-    #region private
+        #region private
 
-    private Vector Position;
+        internal Vector Position { get; private set; }
 
-    private void RaiseNewPositionChangeNotification()
+        private void RaiseNewPositionChangeNotification()
     {
       NewPositionNotification?.Invoke(this, Position);
     }
