@@ -8,6 +8,9 @@
 //
 //_____________________________________________________________________________________________________________________________________
 
+using System.Numerics;
+using TP.ConcurrentProgramming.Data;
+
 namespace TP.ConcurrentProgramming.BusinessLogic.Test
 {
   [TestClass]
@@ -31,8 +34,11 @@ namespace TP.ConcurrentProgramming.BusinessLogic.Test
       public Data.IVector Velocity { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
       public event EventHandler<Data.IVector>? NewPositionNotification;
-
-      internal void Move()
+            public Data.IVector Position { get; } = new VectorFixture(0.0, 0.0);
+            public double Mass { get; } = 10.0;
+            public double Radius { get; } = 5.0;
+            public string Color { get; } = "White";
+            internal void Move()
       {
         NewPositionNotification?.Invoke(this, new VectorFixture(0.0, 0.0));
       }

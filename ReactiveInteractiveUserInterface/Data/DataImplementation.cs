@@ -62,21 +62,25 @@ namespace TP.ConcurrentProgramming.Data
         #region IDisposable
 
         protected virtual void Dispose(bool disposing)
-    {
-      if (!Disposed)
-      {
-        if (disposing)
         {
-          MoveTimer.Dispose();
-          BallsList.Clear();
-        }
-        Disposed = true;
-      }
-      else
-        throw new ObjectDisposedException(nameof(DataImplementation));
-    }
+            if (!Disposed)
+            {
+                if (disposing)
+                {
 
-    public override void Dispose()
+                    foreach (var ball in BallsList)
+                    {
+                        ball.Dispose();
+                    }
+                    BallsList.Clear();
+                }
+                Disposed = true;
+            }
+            else
+                throw new ObjectDisposedException(nameof(DataImplementation));
+        }
+
+        public override void Dispose()
     {
       // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
       Dispose(disposing: true);

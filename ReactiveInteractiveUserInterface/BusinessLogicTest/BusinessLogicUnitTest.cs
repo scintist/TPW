@@ -64,6 +64,7 @@ namespace TP.ConcurrentProgramming.BusinessLogic.Test
 
     private class DataLayerConstructorFixcure : Data.DataAbstractAPI
     {
+      public override IEnumerable<Data.IBall> GetBalls() { return new List<Data.IBall>(); }
       public override void Dispose()
       { }
 
@@ -75,7 +76,8 @@ namespace TP.ConcurrentProgramming.BusinessLogic.Test
 
     private class DataLayerDisposeFixcure : Data.DataAbstractAPI
     {
-      internal bool Disposed = false;
+     public override IEnumerable<Data.IBall> GetBalls() { return new List<Data.IBall>(); }
+     internal bool Disposed = false;
 
       public override void Dispose()
       {
@@ -90,6 +92,7 @@ namespace TP.ConcurrentProgramming.BusinessLogic.Test
 
     private class DataLayerStartFixcure : Data.DataAbstractAPI
     {
+      public override IEnumerable<Data.IBall> GetBalls() { return new List<Data.IBall>(); }
       internal bool StartCalled = false;
       internal int NumberOfBallseCreated = -1;
 
@@ -112,8 +115,12 @@ namespace TP.ConcurrentProgramming.BusinessLogic.Test
       private class DataBallFixture : Data.IBall
       {
         public IVector Velocity { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+                public IVector Position { get; } = new DataVectorFixture();
+                public double Mass { get; } = 10.0;
+                public double Radius { get; } = 5.0;
+                public string Color { get; } = "White";
 
-        public event EventHandler<IVector>? NewPositionNotification = null;
+                public event EventHandler<IVector>? NewPositionNotification = null;
       }
     }
 
