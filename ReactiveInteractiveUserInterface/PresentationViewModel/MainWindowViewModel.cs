@@ -9,7 +9,8 @@
 
 using System;
 using System.Collections.ObjectModel;
-using System.Windows.Input; 
+using System.Windows.Input;
+using System.Windows.Data;
 using TP.ConcurrentProgramming.Presentation.Model;
 using TP.ConcurrentProgramming.Presentation.ViewModel.MVVMLight;
 using ModelIBall = TP.ConcurrentProgramming.Presentation.Model.IBall;
@@ -23,8 +24,12 @@ namespace TP.ConcurrentProgramming.Presentation.ViewModel
         public MainWindowViewModel() : this(null)
         { }
 
+        private readonly object _collectionLock = new object();
+
         internal MainWindowViewModel(ModelAbstractApi modelLayerAPI)
         {
+            BindingOperations.EnableCollectionSynchronization(Balls, _collectionLock);
+
             ModelLayer = modelLayerAPI == null ? ModelAbstractApi.CreateModel() : modelLayerAPI;
             Observer = ModelLayer.Subscribe<ModelIBall>(x => Balls.Add(x));
 

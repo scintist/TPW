@@ -10,41 +10,42 @@
 
 namespace TP.ConcurrentProgramming.Data
 {
-  internal class Ball : IBall
-  {
-    #region ctor
-
-    internal Ball(Vector initialPosition, Vector initialVelocity)
+    internal class Ball : IBall
     {
-      Position = initialPosition;
-      Velocity = initialVelocity;
+        private bool _isMoving = true;
+
+        internal Ball(Vector initialPosition, Vector initialVelocity, double mass, double radius, string color)
+        {
+            Position = initialPosition;
+            Velocity = initialVelocity;
+            Mass = mass;
+            Radius = radius;
+            Color = color;
+
+            Task.Run(MoveLoop);
+        }
+
+        public event EventHandler<IVector>? NewPositionNotification;
+
+        public IVector Velocity { get; set; }
+        public IVector Position { get; private set; }
+        public double Mass { get; }
+        public double Radius { get; }
+        public string Color { get; }
+
+        private async Task MoveLoop()
+        {
+            while (_isMoving)
+            {
+                Position = new Vector(Position.x + Velocity.x, Position.y + Velocity.y);
+                NewPositionNotification?.Invoke(this, Position);
+                await Task.Delay(16);
+            }
+        }
+
+        public void Dispose()
+        {
+            _isMoving = false;
+        }
     }
-
-    #endregion ctor
-
-    #region IBall
-
-    public event EventHandler<IVector>? NewPositionNotification;
-
-    public IVector Velocity { get; set; }
-
-        #endregion IBall
-
-        #region private
-
-        internal Vector Position { get; private set; }
-
-        private void RaiseNewPositionChangeNotification()
-    {
-      NewPositionNotification?.Invoke(this, Position);
-    }
-
-    internal void Move()
-    {
-         Position = new Vector(Position.x + Velocity.x, Position.y + Velocity.y);
-         RaiseNewPositionChangeNotification();
-     }
-
-    #endregion private
-  }
 }

@@ -19,36 +19,49 @@ namespace TP.ConcurrentProgramming.Data
 
     public DataImplementation()
     {
-      MoveTimer = new Timer(Move, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(100));
     }
+      
+        private Random RandomGenerator = new();
+        private List<Ball> BallsList = [];
 
-    #endregion ctor
+        #endregion ctor
 
-    #region DataAbstractAPI
+        #region DataAbstractAPI
 
-    public override void Start(int numberOfBalls, Action<IVector, IBall> upperLayerHandler)
-    {
-      if (Disposed)
-        throw new ObjectDisposedException(nameof(DataImplementation));
-      if (upperLayerHandler == null)
-        throw new ArgumentNullException(nameof(upperLayerHandler));
-      Random random = new Random();
-      for (int i = 0; i < numberOfBalls; i++)
-      {
-          Vector startingPosition = new(random.Next(20, 380), random.Next(20, 380));
-          Vector initialVelocity = new(random.NextDouble() * 10 - 5, random.NextDouble() * 10 - 5);
-          Ball newBall = new(startingPosition, initialVelocity);
-          upperLayerHandler(startingPosition, newBall);
-          BallsList.Add(newBall);
-       }
+        public override void Start(int numberOfBalls, Action<IVector, IBall> upperLayerHandler)
+        {
+            if (Disposed)
+                throw new ObjectDisposedException(nameof(DataImplementation));
+            if (upperLayerHandler == null)
+                throw new ArgumentNullException(nameof(upperLayerHandler));
 
-    }
+            string[] poolColors = { "White", "Yellow", "Blue", "Red", "Purple", "Orange", "Green", "Black" };
 
-    #endregion DataAbstractAPI
+            for (int i = 0; i < numberOfBalls; i++)
+            {
+                double radius = 15.0;
+                double mass = 170.0;
+                string color = poolColors[i % poolColors.Length];
 
-    #region IDisposable
+                Vector startingPosition = new(RandomGenerator.Next(30, 370), RandomGenerator.Next(30, 370));
+                Vector initialVelocity = new(RandomGenerator.NextDouble() * 4 - 2, RandomGenerator.NextDouble() * 4 - 2);
 
-    protected virtual void Dispose(bool disposing)
+                Ball newBall = new(startingPosition, initialVelocity, mass, radius, color);
+                upperLayerHandler(startingPosition, newBall);
+                BallsList.Add(newBall);
+            }
+        }
+        public override IEnumerable<IBall> GetBalls()
+        {
+            return BallsList;
+        }
+
+
+        #endregion DataAbstractAPI
+
+        #region IDisposable
+
+        protected virtual void Dispose(bool disposing)
     {
       if (!Disposed)
       {
@@ -77,33 +90,9 @@ namespace TP.ConcurrentProgramming.Data
     //private bool disposedValue;
     private bool Disposed = false;
 
-    private readonly Timer MoveTimer;
-    private Random RandomGenerator = new();
-    private List<Ball> BallsList = [];
+   
 
-    private void Move(object? x)
-    {
-            double boardSize = 400; 
-            double ballDiameter = 20;
-
-            foreach (Ball item in BallsList)
-            {
-                double nextX = item.Position.x + item.Velocity.x;
-                double nextY = item.Position.y + item.Velocity.y;
-
-                double newVx = item.Velocity.x;
-                double newVy = item.Velocity.y;
-
-                if (nextX <= 0 || nextX >= boardSize - ballDiameter)
-                    newVx = -item.Velocity.x;
-
-                if (nextY <= 0 || nextY >= boardSize - ballDiameter)
-                    newVy = -item.Velocity.y;
-
-                item.Velocity = new Vector(newVx, newVy);
-                item.Move();
-            }
-        }
+   
 
     #endregion private
 

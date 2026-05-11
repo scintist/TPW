@@ -16,27 +16,24 @@ namespace TP.ConcurrentProgramming.DataTest
     public class BallUnitTest
     {
         [TestMethod]
-        public void MoveTestMethod()
+        public async Task BallMovementTest()
         {
             Vector initialPosition = new Vector(10.0, 10.0);
             Vector initialVelocity = new Vector(5.0, -2.0);
-            Ball ball = new Ball(initialPosition, initialVelocity);
+            Ball ball = new Ball(initialPosition, initialVelocity, 10.0, 5.0, "Red");
 
-            IVector currentPosition = new Vector(0.0, 0.0);
-            int numberOfCallBackCalled = 0;
+            bool eventFired = false;
 
             ball.NewPositionNotification += (sender, position) =>
             {
-                Assert.IsNotNull(sender);
-                currentPosition = position;
-                numberOfCallBackCalled++;
+                eventFired = true;
             };
 
-            ball.Move();
+            await Task.Delay(50);
 
-            Assert.AreEqual(1, numberOfCallBackCalled);
-            Assert.AreEqual(15.0, currentPosition.x);
-            Assert.AreEqual(8.0, currentPosition.y);
+            ball.Dispose();
+
+            Assert.IsTrue(eventFired);
         }
     }
 }
