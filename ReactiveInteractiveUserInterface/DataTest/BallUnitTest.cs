@@ -8,24 +8,35 @@
 //
 //_____________________________________________________________________________________________________________________________________
 
-namespace TP.ConcurrentProgramming.Data.Test
-{
-  [TestClass]
-  public class BallUnitTest
-  {
-    [TestMethod]
-    public void ConstructorTestMethod()
-    {
-      Vector testinVector = new Vector(0.0, 0.0);
-      Ball newInstance = new(testinVector, testinVector);
-    }
+using TP.ConcurrentProgramming.Data;
 
-    [TestMethod]
-    public void MoveTestMethod()
+namespace TP.ConcurrentProgramming.DataTest
+{
+    [TestClass]
+    public class BallUnitTest
     {
-      Vector initialPosition = new(10.0, 10.0);
-      Ball newInstance = new(initialPosition, new Vector(5.0, 5.0));
-      newInstance.Move();
-     }
+        [TestMethod]
+        public void MoveTestMethod()
+        {
+            Vector initialPosition = new Vector(10.0, 10.0);
+            Vector initialVelocity = new Vector(5.0, -2.0);
+            Ball ball = new Ball(initialPosition, initialVelocity);
+
+            IVector currentPosition = new Vector(0.0, 0.0);
+            int numberOfCallBackCalled = 0;
+
+            ball.NewPositionNotification += (sender, position) =>
+            {
+                Assert.IsNotNull(sender);
+                currentPosition = position;
+                numberOfCallBackCalled++;
+            };
+
+            ball.Move();
+
+            Assert.AreEqual(1, numberOfCallBackCalled);
+            Assert.AreEqual(15.0, currentPosition.x);
+            Assert.AreEqual(8.0, currentPosition.y);
+        }
     }
 }
