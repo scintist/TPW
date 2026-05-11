@@ -16,37 +16,46 @@ namespace TP.ConcurrentProgramming.Presentation.Model.Test
   public class ModelBallUnitTest
   {
     [TestMethod]
-    public void ConstructorTestMethod()
-    {
-      ModelBall ball = new ModelBall(0.0, 0.0, new BusinessLogicIBallFixture());
-      Assert.AreEqual<double>(0.0, ball.Top);
-      Assert.AreEqual<double>(0.0, ball.Top);
-    }
+        public void ConstructorTestMethod()
+        {
+            BusinessLogicIBallFixture fixture = new BusinessLogicIBallFixture();
 
-    [TestMethod]
-    public void PositionChangeNotificationTestMethod()
-    {
-      int notificationCounter = 0;
-      ModelBall ball = new ModelBall(0, 0.0, new BusinessLogicIBallFixture());
-      ball.PropertyChanged += (sender, args) => notificationCounter++;
-      Assert.AreEqual(0, notificationCounter);
-      ball.SetLeft(1.0);
-      Assert.AreEqual<int>(1, notificationCounter);
-      Assert.AreEqual<double>(1.0, ball.Left);
-      Assert.AreEqual<double>(0.0, ball.Top);
-      ball.SettTop(1.0);
-      Assert.AreEqual(2, notificationCounter);
-      Assert.AreEqual<double>(1.0, ball.Left);
-      Assert.AreEqual<double>(1.0, ball.Top);
-    }
+            ModelBall ball = new ModelBall(0.0, 0.0, fixture.Radius, fixture.Color, fixture);
 
-    #region testing instrumentation
+            Assert.AreEqual<double>(-15.0, ball.Top);
+            Assert.AreEqual<double>(-15.0, ball.Left);
+        }
 
-    private class BusinessLogicIBallFixture : BusinessLogic.IBall
+        [TestMethod]
+        public void PositionChangeNotificationTestMethod()
+        {
+            int notificationCounter = 0;
+            BusinessLogicIBallFixture fixture = new BusinessLogicIBallFixture();
+
+            ModelBall ball = new ModelBall(0.0, 0.0, fixture.Radius, fixture.Color, fixture);
+
+            ball.PropertyChanged += (sender, args) => notificationCounter++;
+            Assert.AreEqual(0, notificationCounter);
+
+            ball.SetLeft(1.0);
+            Assert.AreEqual<int>(1, notificationCounter);
+            Assert.AreEqual<double>(-14.0, ball.Left);
+            Assert.AreEqual<double>(-15.0, ball.Top);
+
+            ball.SettTop(1.0);
+            Assert.AreEqual(2, notificationCounter);
+            Assert.AreEqual<double>(-14.0, ball.Left);
+            Assert.AreEqual<double>(-14.0, ball.Top);
+        }
+
+        #region testing instrumentation
+
+        private class BusinessLogicIBallFixture : BusinessLogic.IBall
     {
       public event EventHandler<IPosition>? NewPositionNotification;
-
-      public void Dispose()
+            public double Radius { get; } = 15.0;
+            public string Color { get; } = "White";
+            public void Dispose()
       {
         throw new NotImplementedException();
       }

@@ -17,62 +17,71 @@ using LogicIBall = TP.ConcurrentProgramming.BusinessLogic.IBall;
 
 namespace TP.ConcurrentProgramming.Presentation.Model
 {
-  internal class ModelBall : IBall
-  {
-    public ModelBall(double top, double left, LogicIBall underneathBall)
+  internal class ModelBall : IBall, INotifyPropertyChanged
     {
-      TopBackingField = top;
-      LeftBackingField = left;
-      underneathBall.NewPositionNotification += NewPositionNotification;
-    }
+        public ModelBall(double top, double left, double radius, string color, LogicIBall underneathBall)
+        {
+            _radius = radius;
+            Diameter = radius * 2;
+            Color = color;
 
-    #region IBall
+            TopBackingField = top - _radius;
+            LeftBackingField = left - _radius;
 
-    public double Top
-    {
-      get { return TopBackingField; }
-      private set
-      {
-        if (TopBackingField == value)
-          return;
-        TopBackingField = value;
-        RaisePropertyChanged();
-      }
-    }
+            underneathBall.NewPositionNotification += NewPositionNotification;
+        }
 
-    public double Left
-    {
-      get { return LeftBackingField; }
-      private set
-      {
-        if (LeftBackingField == value)
-          return;
-        LeftBackingField = value;
-        RaisePropertyChanged();
-      }
-    }
+        #region IBall
 
-    public double Diameter { get; init; } = 0;
+        public double Top
+        {
+            get { return TopBackingField; }
+            private set
+            {
+                if (TopBackingField == value)
+                    return;
+                TopBackingField = value;
+                RaisePropertyChanged();
+            }
+        }
 
-    #region INotifyPropertyChanged
+        public double Left
+        {
+            get { return LeftBackingField; }
+            private set
+            {
+                if (LeftBackingField == value)
+                    return;
+                LeftBackingField = value;
+                RaisePropertyChanged();
+            }
+        }
 
-    public event PropertyChangedEventHandler PropertyChanged;
+        public double Diameter { get; }
 
-    #endregion INotifyPropertyChanged
+        public string Color { get; }
 
-    #endregion IBall
+        #region INotifyPropertyChanged
 
-    #region private
+        public event PropertyChangedEventHandler PropertyChanged;
 
-    private double TopBackingField;
-    private double LeftBackingField;
+        #endregion INotifyPropertyChanged
 
-    private void NewPositionNotification(object sender, IPosition e)
-    {
-      Top = e.y; Left = e.x;
-    }
+        #endregion IBall
 
-    private void RaisePropertyChanged([CallerMemberName] string propertyName = "")
+        #region private
+
+        private double TopBackingField;
+        private double LeftBackingField;
+        private readonly double _radius;
+
+        private void NewPositionNotification(object sender, IPosition e)
+        {
+            Top = e.y - _radius;
+            Left = e.x - _radius;
+        }
+
+        private void RaisePropertyChanged([CallerMemberName] string propertyName = "")
     {
       PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
@@ -83,12 +92,11 @@ namespace TP.ConcurrentProgramming.Presentation.Model
 
     [Conditional("DEBUG")]
     internal void SetLeft(double x)
-    { Left = x; }
+    { Left = x - _radius; }
 
     [Conditional("DEBUG")]
     internal void SettTop(double x)
-    { Top = x; }
-
+    { Top = x - _radius; }
     #endregion testing instrumentation
   }
 }

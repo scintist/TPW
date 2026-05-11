@@ -12,20 +12,23 @@ namespace TP.ConcurrentProgramming.BusinessLogic
 {
   internal class Ball : IBall
   {
-    public Ball(Data.IBall ball)
-    {
-      ball.NewPositionNotification += RaisePositionChangeEvent;
-    }
+        private readonly Data.IBall _dataBall;
+        public Ball(Data.IBall ball)
+        {
+            _dataBall = ball;
+            ball.NewPositionNotification += RaisePositionChangeEvent;
+        }
 
-    #region IBall
+        #region IBall
 
-    public event EventHandler<IPosition>? NewPositionNotification;
+        public event EventHandler<IPosition>? NewPositionNotification;
+        public double Radius => _dataBall.Radius;
+        public string Color => _dataBall.Color;
+        #endregion IBall
 
-    #endregion IBall
+        #region private
 
-    #region private
-
-    private void RaisePositionChangeEvent(object? sender, Data.IVector e)
+        private void RaisePositionChangeEvent(object? sender, Data.IVector e)
     {
       NewPositionNotification?.Invoke(this, new Position(e.x, e.y));
     }
