@@ -20,13 +20,13 @@
 
             <Button Command="{Binding StartCommand}" Content="Start" Width="80" Height="25" />
         </StackPanel>
-
-        <Border BorderThickness="4" BorderBrush="Green" Height="420" Width="400" Margin="10">
+        <Viewbox Stretch="Uniform">
+            <Border BorderThickness="4" BorderBrush="Green" Margin="10">
             <ItemsControl ItemsSource="{Binding Balls}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <Canvas />
-                    </ItemsPanelTemplate>
+                            <Canvas Width="400" Height="400" Background="Transparent" ClipToBounds="True" />
+                        </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
 
                 <ItemsControl.ItemTemplate>
@@ -43,6 +43,6 @@
                 </ItemsControl.ItemContainerStyle>
             </ItemsControl>
         </Border>
-
+        </Viewbox>
     </DockPanel>
 </Window>

@@ -57,18 +57,29 @@ namespace TP.ConcurrentProgramming.BusinessLogic
         {
             if (sender is not TP.ConcurrentProgramming.Data.IBall currentBall) return;
 
-            double boardSize = 400;
+            double boardWidth = 400.0;
+            double boardHeight = 400.0;
 
             lock (_collisionLock)
             {
-                if (currentBall.Position.x - currentBall.Radius <= 0 || currentBall.Position.x + currentBall.Radius >= boardSize)
+                if (currentBall.Position.x - currentBall.Radius <= 0)
                 {
-                    currentBall.Velocity = new LogicVector(-currentBall.Velocity.x, currentBall.Velocity.y);
+                    currentBall.Velocity = new LogicVector(Math.Abs(currentBall.Velocity.x), currentBall.Velocity.y);
                 }
-                if (currentBall.Position.y - currentBall.Radius <= 0 || currentBall.Position.y + currentBall.Radius >= boardSize)
+                else if (currentBall.Position.x + currentBall.Radius >= boardWidth)
                 {
-                    currentBall.Velocity = new LogicVector(currentBall.Velocity.x, -currentBall.Velocity.y);
+                    currentBall.Velocity = new LogicVector(-Math.Abs(currentBall.Velocity.x), currentBall.Velocity.y);
                 }
+
+                if (currentBall.Position.y - currentBall.Radius <= 0)
+                {
+                    currentBall.Velocity = new LogicVector(currentBall.Velocity.x, Math.Abs(currentBall.Velocity.y));
+                }
+                else if (currentBall.Position.y + currentBall.Radius >= boardHeight)
+                {
+                    currentBall.Velocity = new LogicVector(currentBall.Velocity.x, -Math.Abs(currentBall.Velocity.y));
+                }
+
 
                 var allBalls = layerBellow.GetBalls().ToList();
                 foreach (var otherBall in allBalls)
