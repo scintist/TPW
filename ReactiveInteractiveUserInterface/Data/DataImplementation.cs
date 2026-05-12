@@ -35,18 +35,16 @@ namespace TP.ConcurrentProgramming.Data
             if (upperLayerHandler == null)
                 throw new ArgumentNullException(nameof(upperLayerHandler));
 
-            string[] poolColors = { "White", "Yellow", "Blue", "Red", "Purple", "Orange", "Green", "Black" };
 
             for (int i = 0; i < numberOfBalls; i++)
             {
                 double radius = 15.0;
                 double mass = 170.0;
-                string color = poolColors[i % poolColors.Length];
 
                 Vector startingPosition = new(RandomGenerator.Next(30, 370), RandomGenerator.Next(30, 370));
                 Vector initialVelocity = new(RandomGenerator.NextDouble() * 4 - 2, RandomGenerator.NextDouble() * 4 - 2);
 
-                Ball newBall = new(startingPosition, initialVelocity, mass, radius, color);
+                Ball newBall = new(startingPosition, initialVelocity, mass, radius);
                 upperLayerHandler(startingPosition, newBall);
                 BallsList.Add(newBall);
             }

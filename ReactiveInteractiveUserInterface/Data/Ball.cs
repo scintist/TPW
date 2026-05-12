@@ -14,13 +14,12 @@ namespace TP.ConcurrentProgramming.Data
     {
         private bool _isMoving = true;
 
-        internal Ball(Vector initialPosition, Vector initialVelocity, double mass, double radius, string color)
+        internal Ball(Vector initialPosition, Vector initialVelocity, double mass, double radius)
         {
             Position = initialPosition;
             Velocity = initialVelocity;
             Mass = mass;
             Radius = radius;
-            Color = color;
 
             Task.Run(MoveLoop);
         }
@@ -31,7 +30,6 @@ namespace TP.ConcurrentProgramming.Data
         public IVector Position { get; private set; }
         public double Mass { get; }
         public double Radius { get; }
-        public string Color { get; }
 
         private async Task MoveLoop()
         {

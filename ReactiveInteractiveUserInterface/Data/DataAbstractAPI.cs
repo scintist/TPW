@@ -61,6 +61,5 @@ namespace TP.ConcurrentProgramming.Data
         IVector Position { get; }
         double Mass { get; }
         double Radius { get; }
-        string Color { get; }
     }
 }

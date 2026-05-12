@@ -65,7 +65,7 @@ namespace TP.ConcurrentProgramming.Presentation.Model
 
     private void StartHandler(BusinessLogic.IPosition position, BusinessLogic.IBall ball)
     {
-      ModelBall newBall = new ModelBall(position.y, position.x, ball.Radius, ball.Color, ball);
+      ModelBall newBall = new ModelBall(position.y, position.x, ball.Radius, ball);
       BallChanged.Invoke(this, new BallChaneEventArgs() { Ball = newBall });
     }
 

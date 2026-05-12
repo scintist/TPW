@@ -23,7 +23,6 @@ namespace TP.ConcurrentProgramming.BusinessLogic
 
         public event EventHandler<IPosition>? NewPositionNotification;
         public double Radius => _dataBall.Radius;
-        public string Color => _dataBall.Color;
         #endregion IBall
 
         #region private

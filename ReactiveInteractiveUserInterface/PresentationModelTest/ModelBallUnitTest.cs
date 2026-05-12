@@ -20,7 +20,7 @@ namespace TP.ConcurrentProgramming.Presentation.Model.Test
         {
             BusinessLogicIBallFixture fixture = new BusinessLogicIBallFixture();
 
-            ModelBall ball = new ModelBall(0.0, 0.0, fixture.Radius, fixture.Color, fixture);
+            ModelBall ball = new ModelBall(0.0, 0.0, fixture.Radius,fixture);
 
             Assert.AreEqual<double>(-15.0, ball.Top);
             Assert.AreEqual<double>(-15.0, ball.Left);
@@ -32,7 +32,7 @@ namespace TP.ConcurrentProgramming.Presentation.Model.Test
             int notificationCounter = 0;
             BusinessLogicIBallFixture fixture = new BusinessLogicIBallFixture();
 
-            ModelBall ball = new ModelBall(0.0, 0.0, fixture.Radius, fixture.Color, fixture);
+            ModelBall ball = new ModelBall(0.0, 0.0, fixture.Radius,fixture);
 
             ball.PropertyChanged += (sender, args) => notificationCounter++;
             Assert.AreEqual(0, notificationCounter);

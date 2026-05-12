@@ -20,7 +20,7 @@ namespace TP.ConcurrentProgramming.DataTest
         {
             Vector initialPosition = new Vector(10.0, 10.0);
             Vector initialVelocity = new Vector(5.0, -2.0);
-            Ball ball = new Ball(initialPosition, initialVelocity, 10.0, 5.0, "Red");
+            Ball ball = new Ball(initialPosition, initialVelocity, 10.0, 5.0);
 
             bool eventFired = false;
 

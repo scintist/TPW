@@ -19,11 +19,10 @@ namespace TP.ConcurrentProgramming.Presentation.Model
 {
   internal class ModelBall : IBall, INotifyPropertyChanged
     {
-        public ModelBall(double top, double left, double radius, string color, LogicIBall underneathBall)
+        public ModelBall(double top, double left, double radius, LogicIBall underneathBall)
         {
             _radius = radius;
             Diameter = radius * 2;
-            Color = color;
 
             TopBackingField = top - _radius;
             LeftBackingField = left - _radius;
